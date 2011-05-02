@@ -1,6 +1,7 @@
 function infoRenderer() {
   this.render = function(data) {
-    var content = '<ul class="infoContainer">';
+    var content = makeToolbar(data);
+    content += '<ul class="infoContainer">';
     function recurRender(obj) {
       for (property in obj) {
         if (typeof(obj[property]) == 'object' && !obj[property].forEach) {
@@ -9,7 +10,7 @@ function infoRenderer() {
           content += '</ul></span></li>';
         }
         if (typeof(obj[property]) == 'string') {
-          content += '<li><label>'+property+':</label><span>'+obj[property].replace('<','').replace('>', '')+'</span></li>';
+          content += '<li><label>'+property+':</label><span>'+obj[property].replace('<','&#060;').replace('>', '&#062;')+'</span></li>';
         }
         if (typeof(obj[property]) == 'object' && obj[property].forEach) {
           content += '<li><label>'+property+':</label><span><ul>'
@@ -32,5 +33,14 @@ function infoRenderer() {
        width: 600,
        height: 300
     });
+    
+    function makeToolbar(data) {
+      if (typeof(installedList[data.name]) != 'undefined') {
+        return '<ul class="toolbar"><li class="uninstall" rel="'+data.name+'">Uninstall</li></ul>'
+      }
+      else {
+        return '<ul class="toolbar"><li class="install" rel="'+data.name+'">Install</li></ul>'
+      }
+    }
   };
 }

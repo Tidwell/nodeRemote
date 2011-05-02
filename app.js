@@ -33,8 +33,14 @@ socket.on('connection', function(client){
     if (args.command == 'registry') {
       remote.registry(socket, args);
     }
+    if (args.command == 'install') {
+      remote.install(socket, args.args);
+    }
+    if (args.command == 'uninstall') {
+      remote.uninstall(socket, args.args);
+    }
   }) 
   client.on('disconnect', function(){
-    console.log('disco');
+    //console.log('disco');
   }) 
 }); 

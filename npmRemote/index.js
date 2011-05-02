@@ -1,6 +1,7 @@
 var util = require('util');
 var exec = require('child_process').exec;
 var http = require('http');
+var errorHandler = require('./errorHandler');
 
 var registryCache = null;
 module.exports = (function() {
@@ -10,9 +11,8 @@ module.exports = (function() {
   //{command, callback}
   var childExec = function(args) {
     child = exec(args.command, function(error, stdout, stderr){
-      if(error !== null)
-      {
-        console.log('exec error (this is probably fatal): ' + error);
+      if(error !== null) {
+        errorHandler.handle(args, error);
       }
       else {
         args.callback(stdout);
@@ -27,7 +27,8 @@ module.exports = (function() {
         callback: function(data) {
           var data = parser.ls(data);
           socket.broadcast({command: 'ls', data: data});
-        }
+        },
+        socket: socket
       });
     },
     info: function(socket, args) {
@@ -35,7 +36,8 @@ module.exports = (function() {
         command: 'npm info '+args,
         callback: function(infodata) {
           socket.broadcast({command: 'info', data: {stdout: infodata, json: eval('('+infodata+')')}});
-        }
+        },
+        socket: socket
       });
     },
     registry: function(socket) {
@@ -66,6 +68,32 @@ module.exports = (function() {
       function send(data) {
         socket.broadcast({command: 'registry', data: data});
       }
+    },
+    install: function(socket, args) {
+      childExec({
+        command: 'npm install '+args,
+        callback: function(data) {
+          data = data.replace(' ', '');
+          if (data == '') {
+            data = 'no error reported from npm process. Assumed Success (yea...)';
+            socket.broadcast({command: 'install', data: {stdout: data, json: {success: true, name: args}}});
+          }
+        },
+        socket: socket
+      });
+    },
+    uninstall: function(socket, args) {
+      childExec({
+        command: 'npm uninstall '+args,
+        callback: function(data) {
+          data = data.replace(' ', '');
+          if (data == '') {
+            data = 'no error reported from npm process. Assumed Success (yea...)';
+            socket.broadcast({command: 'uninstall', data: {stdout: data, json: {success: true, name: args}}});
+          }
+        },
+        socket: socket
+      });
     }
   }
 }());

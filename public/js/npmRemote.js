@@ -1,4 +1,5 @@
-  var installedList = {};
+var installedList = {};
+
 function npmRemote(){
   var socket;
   var remote = this;
@@ -27,7 +28,9 @@ function npmRemote(){
   var infoRend = new infoRenderer();
   this.renderer = {
     ls : function(args) {
+      installedList = {};
       var pList = $('.packageList ul');
+      pList.html('');
       stdout(args.data.stdout, 'installed active packages');
       pList.html();
       args.data.json.forEach(function(pack) { 
@@ -36,7 +39,6 @@ function npmRemote(){
           installedList[pack.name] = pack;
         }
       });
-      socket.send({command: 'registry'});
     },
     info: function(args) {
       stdout(args.data.stdout, 'info '+args.data.json.name);
@@ -58,6 +60,20 @@ function npmRemote(){
       }
       $('.registry p').hide();
       $('.registry ul').show();
+    },
+    install: function(args) {
+      stdout(args.data.stdout,'install');
+      alert(args.data.json.name+' was successfully installed');
+      socket.send({command: 'ls'});
+    },
+    uninstall: function(args) {
+      stdout(args.data.stdout,'uninstall');
+      alert(args.data.json.name+' was successfully uninstalled');
+      socket.send({command: 'ls'});
+    },
+    error : function(args) {
+      stdout(args.data.stdout,'error');
+      alert(args.data.json.error);
     }
   };
   
@@ -83,6 +99,25 @@ function npmRemote(){
         $(event.target).effect("highlight", {}, 3000);
         socket.send({command: 'info', args: $(event.target).html()});
       }
+    });
+    
+    $('.install').live('click', function(event) {
+      var toInstall = $(this).attr('rel');
+      if (confirm('Do you want to install '+toInstall+'?')) {
+        socket.send({command: 'install', args: toInstall});
+      }
+    });
+    $('.uninstall').live('click', function(event) {
+      var toUninstall = $(this).attr('rel');
+      if (confirm('Do you want to uninstall '+toUninstall+'?')) {
+        socket.send({command: 'uninstall', args: toUninstall});
+      }
+    });
+    $('.registry p').hide();
+    $('.registry .reload').live('click', function(event) {
+      $('.registry .reload').hide();
+      socket.send({command: 'registry'});
+      $('.registry p').show();
     });
   };
 }

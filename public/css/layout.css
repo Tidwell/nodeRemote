@@ -1,21 +1,49 @@
 * {
   font-size: 12px;
 }
+
+.stdout strong {
+  font-weight: bold;
+}
+
 .packageList ul li, .registry ul li  {
   margin: 4px;
   cursor: pointer;
 }
 
-.active {
-  background-color: #ccc;
-}
-.stdout strong {
-  font-weight: bold;
-}
 .registry p {
   text-align: center;
   margin: 2px;
   padding: 2px;
+}
+.registry button {
+  margin: 0 auto;
+  display: block;
+  width: 100px;
+}
+.registry .installed {
+  background: green;
+}
+
+.packageInfo ul.toolbar {
+  border-bottom: 1px solid;
+  overflow: hidden;
+}
+.packageInfo ul.toolbar li {
+  float: left;
+  padding: 5px;
+  border-right: 1px solid;
+  text-align: center;
+  background: #ccc;
+  cursor: pointer;
+}
+.packageInfo ul.toolbar li.install {
+  background: url(/images/icons/package_start.png) no-repeat 3px 3px;
+  text-indent: 20px;
+}
+.packageInfo ul.toolbar li.uninstall {
+  background: url(/images/icons/package_stop.png) no-repeat 3px 3px;
+  text-indent: 20px;
 }
 .packageInfo ul.infoContainer  {
   margin: 20px;
@@ -34,9 +62,7 @@
   display: block;
   margin-left: 10px;
 }
-.registry .installed {
-  background: green;
-}
+
 
 #packageList, #stdout, #registry {
   display: none;

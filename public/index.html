@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>npmRemote</title>
+    <link rel="stylesheet" type="text/css" href="css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="css/layout.css" />
+
+    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/black-tie/jquery-ui.css" rel="stylesheet" />
+    <link type="text/css" href="css/jquery.window.css" rel="stylesheet" />
+    
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/jquery.window.js"></script>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/npmRemote.js"></script>
+    <script src="/js/infoRenderer.js"></script>
+    <script>
+      $(document).ready(function() {
+        var remote = new npmRemote()
+        $.window.prepare({
+           dock: 'bottom', 
+           animationSpeed: 200,
+           minWinLong: 180 
+        });
+        $.window({
+           showModal: false,
+           icon: "/images/icons/package_in.png",
+           title: "installed",
+           frameClass: "packageList",
+           content: $("#packageList").html(),
+           width: 200,
+           height: 300,
+           x: 5,
+           y: 5,
+           closable: false
+        });
+        $.window({
+           showModal: false,
+           icon: "/images/icons/package_white.png",
+           title: "registry",
+           frameClass: "registry",
+           content: $("#registry").html(),
+           width: 200,
+           height: 300,
+           x: 210,
+           y: 5,
+           closable: false
+        });
+        $.window({
+           showModal: false,
+           icon: "/images/icons/computer_off.png",
+           title: "stdout",
+           frameClass: "stdout",
+           content: $("#stdout").html(),
+           width: 500,
+           height: 150,
+           x: 5,
+           y: 310,
+           closable: false
+        });
+        
+        remote.connect();
+      });
+    </script>
+	</head>
+	<body>
+    <div id="packageList">
+      <ul></ul>
+    </div>
+    <div id="stdout">
+      <pre></pre>
+    </div>
+    <div id="registry">
+      <p>Loading..</p>
+      <ul></ul>
+    </div>
+	</body>
+</html>

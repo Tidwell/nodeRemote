@@ -1,0 +1,43 @@
+* {
+  font-size: 12px;
+}
+.packageList ul li, .registry ul li  {
+  margin: 4px;
+  cursor: pointer;
+}
+
+.active {
+  background-color: #ccc;
+}
+.stdout strong {
+  font-weight: bold;
+}
+.registry p {
+  text-align: center;
+  margin: 2px;
+  padding: 2px;
+}
+.packageInfo ul.infoContainer  {
+  margin: 20px;
+}
+.packageInfo ul  li {
+  overflow: hidden;
+  font-size: 12px;
+}
+.packageInfo ul  label {
+  width: 100px;
+  float: left;
+  display: block;
+}
+.packageInfo ul span {
+  float: left;
+  display: block;
+  margin-left: 10px;
+}
+.registry .installed {
+  background: green;
+}
+
+#packageList, #stdout, #registry {
+  display: none;
+}

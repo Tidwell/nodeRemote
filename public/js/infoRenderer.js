@@ -1,5 +1,11 @@
+var openWindows = {};
 function infoRenderer() {
   this.render = function(data) {
+    if ($(".packageInfo.pkg_"+data.name).length > 0 && openWindows[data.name]) { 
+      openWindows[data.name].restore();
+      return;
+    }
+    
     var content = makeToolbar(data);
     content += '<ul class="infoContainer">';
     function recurRender(obj) {
@@ -24,11 +30,13 @@ function infoRenderer() {
     recurRender(data);
     content += '</ul>';
     
-    $.window({
+    //memory leak becaus we dont remove from this array when the windows close
+    //todo: fix, obv.
+    openWindows[data.name] = $.window({
        showModal: false,
        icon: "/images/icons/page_magnify.png",
        title: data.name+" - Info",
-       frameClass: "packageInfo",
+       frameClass: "packageInfo pkg_"+data.name,
        content: content,
        width: 600,
        height: 300

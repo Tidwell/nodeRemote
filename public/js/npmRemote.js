@@ -88,6 +88,8 @@ function npmRemote(){
   }
   
   this.bind = function() {
+    $('.registry p').hide();
+    $('.registry button').show();
     var pList = $('.packageList ul');
     pList.live('click', function(event) {
       if (event.target.nodeName.toLowerCase() == 'li') {
@@ -116,7 +118,6 @@ function npmRemote(){
         socket.send({command: 'uninstall', args: toUninstall});
       }
     });
-    $('.registry p').hide();
     $('.registry .reload').live('click', function(event) {
       $('.registry .reload').hide();
       socket.send({command: 'registry'});

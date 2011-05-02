@@ -1,0 +1,21 @@
+Remote Management tool for NPM (and hopefully NVM)
+
+Features:
+ List installed packages
+ Uninstall packages
+ List registry and install packages
+ Info view for all packages
+ Stdout Logging for commands (whatever)
+ Draggable, Resizable, Minimize/Maxamize Windows
+
+Dependancies:
+  express
+  socket.io
+  
+Install:
+ git clone git://github.com/Tidwell/nodeRemote.git
+ cd nodeRemote
+ node app
+
+Use:
+ connect to: http://localhost:8080

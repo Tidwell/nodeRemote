@@ -47,16 +47,24 @@ function npmRemote(){
     },
     registry: function(args) {
       registry = args.data.json;
-      $('.registry ul').hide();
+      $('.registry ul').hide().children().remove();
       stdout(args.msg ? args.msg : 'result loaded from server', 'registry');
       var data = args.data.json;
       for (property in data) {
         if (data[property].name) {
-          $('.registry ul').append('<li>'+data[property].name+'</li>');
+          if (args.filter) {
+            if (data[property].name.indexOf(args.filter) != -1) {
+              $('.registry ul').append('<li>'+data[property].name+'</li>');
+            }
+          }
+          else {
+            $('.registry ul').append('<li>'+data[property].name+'</li>');
+          }
         }
       }
       $('.registry p').hide();
       $('.registry ul').show();
+      $('.registry .search').show();
     },
     install: function(args) {
       stdout(args.data.stdout,'install');
@@ -90,6 +98,7 @@ function npmRemote(){
   this.bind = function() {
     $('.registry p').hide();
     $('.registry button').show();
+    $('.registry .search').hide();
     var pList = $('.packageList ul');
     pList.live('click', function(event) {
       if (event.target.nodeName.toLowerCase() == 'li') {
@@ -121,7 +130,17 @@ function npmRemote(){
     $('.registry .reload').live('click', function(event) {
       $('.registry .reload').hide();
       socket.send({command: 'registry'});
-      $('.registry p').show();
+      $('.registry .loading').show();
+    });
+    $('.registry .search input').unbind().keyup(function(event) {
+      setTimeout(function() {
+        if ($('.registry .search input').val().length > 1) {
+          remote.renderer.registry({data: {json: registry}, filter: $('.registry .search input').val()})
+        }
+        else {
+          remote.renderer.registry({data: {json: registry}})
+        }
+      }, 1000);
     });
   };
 }

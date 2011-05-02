@@ -24,6 +24,18 @@
 .registry .installed {
   background: green;
 }
+.registry .search {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  background: white;
+}
+.registry .seearch input {
+  width: 77%;
+}
+.registry  ul {
+  margin-top: 30px;
+}
 
 .packageInfo ul.toolbar {
   border-bottom: 1px solid;

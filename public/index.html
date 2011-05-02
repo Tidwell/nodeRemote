@@ -41,7 +41,8 @@
            title: "registry",
            frameClass: "registry",
            content: $("#registry").html(),
-           width: 200,
+           width: 220,
+           minWidth: 220,
            height: 300,
            x: 210,
            y: 5,
@@ -55,7 +56,7 @@
            content: $("#stdout").html(),
            width: 500,
            height: 150,
-           x: 415,
+           x: 435,
            y: 155,
            closable: false
         });
@@ -66,10 +67,10 @@
            frameClass: "versions",
            content: $("#versions").html(),
            width: 150,
+           minWidth: 150,
            height: 145,
            minHeight: 145,
-           minWidth: 150,
-           x: 415,
+           x: 435,
            y: 5,
            closable: false
         });
@@ -86,8 +87,9 @@
       <pre></pre>
     </div>
     <div id="registry"> 
-      <p style="display: none">Loading..</p>
+      <p class="loading" style="display: none">Loading..</p>
       <button class="reload">Reload</button>
+      <p class="search"><label>Find:</label><input type="text"></input></p>
       <ul></ul>
     </div>
     <div id="versions">

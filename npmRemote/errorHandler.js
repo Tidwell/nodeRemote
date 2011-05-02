@@ -5,10 +5,10 @@ module.exports = {
     if (error.message.indexOf('depended upon by') != -1) {
       msg = 'Dependancy Error. Uninstall other packages that depend upon this package then try again.'
     }
-    if (error.message.indexOf('Not supported on node@') != -1) {
+    else if (error.message.indexOf('Not supported on node@') != -1) {
       msg = 'This package is not supported on your current version of node.js'
     }
-    if (error.message.indexOf('info using') != -1) {
+    else if (error.message.indexOf('info using') != -1) {
       var parser = require('./parser');
       msg = undefined; //hack to not send an error if version throws an error
       var jdata = parser.version(error.message);

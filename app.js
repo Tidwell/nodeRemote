@@ -16,7 +16,7 @@ var remote = require('./npmRemote');
 //Listen with express
 if (!module.parent) {
   app.listen(8080);
-  console.log("Express server listening on port %d", app.address().port);
+  console.log("npmRemote istening on port %d", app.address().port);
 }
 
 //now we can create our socket connection for the clients

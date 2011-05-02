@@ -55,8 +55,22 @@
            content: $("#stdout").html(),
            width: 500,
            height: 150,
-           x: 5,
-           y: 310,
+           x: 415,
+           y: 155,
+           closable: false
+        });
+        $.window({
+           showModal: false,
+           icon: "/images/icons/world_connect.png",
+           title: "environment",
+           frameClass: "versions",
+           content: $("#versions").html(),
+           width: 150,
+           height: 145,
+           minHeight: 145,
+           minWidth: 150,
+           x: 415,
+           y: 5,
            closable: false
         });
         
@@ -75,6 +89,10 @@
       <p style="display: none">Loading..</p>
       <button class="reload">Reload</button>
       <ul></ul>
+    </div>
+    <div id="versions">
+      <p class="node"><label>node:</label><select></select></p>
+      <p class="npm"><label>npm:</label><select></select></p>
     </div>
 	</body>
 </html>

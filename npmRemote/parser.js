@@ -19,6 +19,18 @@ module.exports = {
       }
     ], rowParsed);
     return {stdout: data, json: objectified};
+  },
+  version: function(data) {
+    var tmp = data.split('npm@');
+    tmp = tmp[1].split('\n');
+    var npmVers = tmp[0];
+    tmp = data.split('node@');
+    tmp = tmp[1].split('\n');
+    var nodeVers = tmp[0];
+    return {
+      node: nodeVers,
+      npm: npmVers
+    }
   }
 }
 

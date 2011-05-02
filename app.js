@@ -24,20 +24,15 @@ var socket = io.listen(app);
 socket.on('connection', function(client){ 
   // new client is here! 
   client.on('message', function(args){
-    if (args.command == 'ls') {
-      remote.ls(socket)
+    if (!args || !args.command) {
+      throw new Error('Badly formatted command');
+      
     }
-    if (args.command == 'info') {
-      remote.info(socket, args.args)
+    else if (remote[args.command]) {
+      remote[args.command](socket, args.args);
     }
-    if (args.command == 'registry') {
-      remote.registry(socket, args);
-    }
-    if (args.command == 'install') {
-      remote.install(socket, args.args);
-    }
-    if (args.command == 'uninstall') {
-      remote.uninstall(socket, args.args);
+    else {
+      throw new Error('Unknown command sent');
     }
   }) 
   client.on('disconnect', function(){

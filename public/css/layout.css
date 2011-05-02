@@ -63,7 +63,21 @@
   margin-left: 10px;
 }
 
+.versions p {
+  margin: 2px auto;
+  overflow: hidden;
+  clear: both;
+  width: 130px;
+}
+.versions p label {
+  width: 50px;
+  float: left;
+}
+.versions p select {
+  width: 80px;
+  float: left;
+}
 
-#packageList, #stdout, #registry {
+#packageList, #stdout, #registry, #versions {
   display: none;
 }

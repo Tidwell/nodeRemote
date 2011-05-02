@@ -23,6 +23,7 @@ function npmRemote(){
   this.init = function() {
     remote.bind();
     socket.send({command: 'ls'});
+    socket.send({command: 'version'});
   };
   
   var infoRend = new infoRenderer();
@@ -39,7 +40,6 @@ function npmRemote(){
           installedList[pack.name] = pack;
         }
       });
-      this.registry({data: { json: registry }, msg: 'result loaded from cache' });
     },
     info: function(args) {
       stdout(args.data.stdout, 'info '+args.data.json.name);
@@ -52,11 +52,7 @@ function npmRemote(){
       var data = args.data.json;
       for (property in data) {
         if (data[property].name) {
-          var addedClass = '';
-          if (typeof(installedList[data[property].name]) != 'undefined') {
-            addedClass = 'installed';
-          }
-          $('.registry ul').append('<li class="'+addedClass+'">'+data[property].name+'</li>');
+          $('.registry ul').append('<li>'+data[property].name+'</li>');
         }
       }
       $('.registry p').hide();
@@ -75,6 +71,12 @@ function npmRemote(){
     error : function(args) {
       stdout(args.data.stdout,'error');
       alert(args.data.json.error);
+    },
+    version: function(args) {
+      stdout(args.data.stdout,'version');
+      $('.versions .npm select, .versions .node select').children().remove();
+      $('.versions .npm select').append('<option>'+args.data.json.npm+'</option>');
+      $('.versions .node select').append('<option>'+args.data.json.node+'</option>');
     }
   };
   

@@ -92,6 +92,16 @@ module.exports = (function() {
         },
         socket: socket
       });
+    },
+    version: function(socket, args) {
+      childExec({
+        command: 'npm version',
+        callback: function(data) {
+          var jdata = parser.version(data);
+          socket.broadcast({command: 'version', data: {stdout: data, json: jdata}});
+        },
+        socket: socket
+      });
     }
   }
 }());

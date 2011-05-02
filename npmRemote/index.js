@@ -6,6 +6,6 @@ module.exports = (function() {
     registry: require('./commands/registry'),
     install: require('./commands/install'),
     uninstall: require('./commands/uninstall'),
-    version: require('./commands/version')
+    version: require('./commands/version'),
   }
 }());

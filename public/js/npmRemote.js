@@ -29,17 +29,14 @@ function npmRemote(){
   var infoRend = new infoRenderer();
   this.renderer = {
     ls : function(args) {
-      installedList = {};
+      var data = args.data;
       var pList = $('.packageList ul');
-      pList.html('');
-      stdout(args.data.stdout, 'installed active packages');
-      pList.html();
-      args.data.json.forEach(function(pack) { 
-        if (pack.name) {
-          pList.append('<li>'+pack.name+'</li>');
-          installedList[pack.name] = pack;
-        }
-      });
+      //pList.html('');
+      stdout(data.toString(), 'installed active packages');
+      if (data.msg.name && data.level == -1 && $('.packageList ul li[rel="'+data.msg.name+'"]').length < 1) {
+        pList.append('<li rel="'+data.msg.name+'">'+data.msg.name+'</li>');
+        installedList[data.msg.name] = data.msg;
+      }
     },
     info: function(args) {
       stdout(args.data.stdout, 'info '+args.data.json.name);
@@ -73,8 +70,15 @@ function npmRemote(){
     },
     uninstall: function(args) {
       stdout(args.data.stdout,'uninstall');
-      alert(args.data.json.name+' was successfully uninstalled');
-      socket.send({command: 'ls'});
+      if (args.data.json.data.pref == 'unbuild') {
+        alert(args.data.json.name+' was successfully uninstalled');
+        $('.packageList ul li[rel="'+args.data.json.name+'"]').remove();
+        delete installedList[args.data.json.name];
+        socket.send({command: 'ls'});
+      }
+      else {
+        alert(args.data.json.data.pref);
+      }
     },
     error : function(args) {
       stdout(args.data.stdout,'error');

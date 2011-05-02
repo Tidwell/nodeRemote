@@ -1,15 +1,19 @@
-var childExec = require(process.cwd()+'/npmRemote/childHelper');
-
-module.exports = function(socket, args) {
-  childExec({
-    command: 'npm install '+args,
-    callback: function(data) {
-      data = data.replace(' ', '');
-      if (data == '') {
-        data = 'no error reported from npm process. Assumed Success (yea...)';
-        socket.broadcast({command: 'install', data: {stdout: data, json: {success: true, name: args}}});
+module.exports = function(socket,args) {
+  var npm = require("npm")
+  npm.load({}, function (er) {
+    if (er) return handlError(er)
+    npm.commands.install([args], function (er, data) {
+      if (er) {
+        throw new Error('ls error');
       }
-    },
-    socket: socket
-  });
+    })
+    var broadsent = false;
+    npm.on("log", function (data) {
+      if (!broadsent) {
+        socket.broadcast({command: 'install', data: {stdout: data, json: {data: data, name: args}}});
+        broadsent = true;
+        console.log(data);
+      }
+    })
+  })
 }

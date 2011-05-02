@@ -1,13 +1,18 @@
-var childExec = require(process.cwd()+'/npmRemote/childHelper');
-var parser = require(process.cwd()+'/npmRemote/parser');
-
 module.exports = function(socket) {
-  childExec({
-    command: 'npm ls installed | grep active',
-    callback: function(data) {
-      var data = parser.ls(data);
-      socket.broadcast({command: 'ls', data: data});
-    },
-    socket: socket
-  });
+  var npm = require("npm")
+  npm.load({}, function (er) {
+    if (er) return handlError(er)
+    npm.commands.ls([], function (er, data) {
+      if (er) {
+        throw new Error('ls error');
+      }
+    })
+    var alldata = []
+    npm.on("log", function (data) {
+      if (data.msg.name && data.level == -1) {
+        alldata.push(data);
+        socket.broadcast({command: 'ls', data: data});
+      }
+    })
+  })
 }

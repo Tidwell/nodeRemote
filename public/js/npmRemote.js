@@ -39,6 +39,7 @@ function npmRemote(){
           installedList[pack.name] = pack;
         }
       });
+      this.registry({data: { json: registry }, msg: 'result loaded from cache' });
     },
     info: function(args) {
       stdout(args.data.stdout, 'info '+args.data.json.name);
@@ -47,7 +48,7 @@ function npmRemote(){
     registry: function(args) {
       registry = args.data.json;
       $('.registry ul').hide();
-      stdout('result loaded from server', 'registry');
+      stdout(args.msg ? args.msg : 'result loaded from server', 'registry');
       var data = args.data.json;
       for (property in data) {
         if (data[property].name) {

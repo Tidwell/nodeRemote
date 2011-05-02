@@ -7,7 +7,7 @@ var registryCache = null;
 module.exports = (function() {
   var parser = require('./parser');
   //creates a child process that makes a call to exec and returns
-  //stdout from that process
+  //stdout from that process also routes to our error handle if something goes bad
   //{command, callback}
   var childExec = function(args) {
     child = exec(args.command, function(error, stdout, stderr){
@@ -20,6 +20,7 @@ module.exports = (function() {
     });
   }
  
+  //the object we make public, each property corresponds to a command from the client
   return {
     ls: function(socket) {
       childExec({
@@ -41,13 +42,13 @@ module.exports = (function() {
       });
     },
     registry: function(socket) {
+      //we cache the registry so we dont spam the server
       if (!registryCache) {
         var options = {
           host: 'registry.npmjs.org',
           port: 80,
           method: 'GET'
         };
-        
         var data = '';
         var req = http.request(options, function(res) {
           res.setEncoding('utf8');
@@ -55,18 +56,15 @@ module.exports = (function() {
             data += chunk;
           });
           res.on('end', function() {
+            //the response is a json object, so we can just eval it and ship that to the client
             registryCache = {json: eval('('+data+')'), stdout: data};
-            send(registryCache)
+            socket.broadcast({command: 'registry', data: registryCache});
           });
         });
         req.end();
       }
       else {
-        send(registryCache);
-      }
-      
-      function send(data) {
-        socket.broadcast({command: 'registry', data: data});
+        socket.broadcast({command: 'registry', data: registryCache});
       }
     },
     install: function(socket, args) {
